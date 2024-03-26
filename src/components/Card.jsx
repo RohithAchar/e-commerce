@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Card = ({ item }) => {
+const Card = ({ item, handleClick }) => {
   const [showMore, setShowMore] = useState(false);
   const description = showMore
     ? item.description
@@ -27,7 +27,11 @@ const Card = ({ item }) => {
           </span>
         )}
       </p>
-      <button className="border-solid border-2 p-2 rounded-sm bg-black text-white mt-5 hover:bg-slate-800">
+      <button
+        id={item.id}
+        onClick={(e) => handleClick(e.target.id)}
+        className="border-solid border-2 p-2 rounded-sm bg-black text-white mt-5 hover:bg-slate-800"
+      >
         Add to cart
       </button>
     </div>

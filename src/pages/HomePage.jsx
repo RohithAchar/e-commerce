@@ -1,4 +1,3 @@
-import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Products from "../components/Products";
 const HomePage = () => {
@@ -6,7 +5,6 @@ const HomePage = () => {
     <>
       <Hero />
       <Products isHome={true} />
-      <Footer />
     </>
   );
 };

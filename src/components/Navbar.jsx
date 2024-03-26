@@ -22,9 +22,7 @@ const Navbar = () => {
           </NavLink>
         </li>
       </ul>
-      <div>
-        <NavLink to="/cart">cart</NavLink>
-      </div>
+      <div></div>
     </nav>
   );
 };
