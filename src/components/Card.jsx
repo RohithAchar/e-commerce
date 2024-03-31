@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Card = ({ item, handleClick }) => {
+const Card = ({ item, handleClick, isCart }) => {
   const [showMore, setShowMore] = useState(false);
   const description = showMore
     ? item.description
@@ -27,6 +27,15 @@ const Card = ({ item, handleClick }) => {
           </span>
         )}
       </p>
+      {isCart && (
+        <label className="flex justify-center mt-2">
+          Qty:{" "}
+          <input
+            className="w-[50px] border-2 border-black ml-2 pl-1"
+            type="number"
+          />
+        </label>
+      )}
       <button
         id={item.id}
         onClick={(e) => handleClick(e.target.id)}

@@ -38,9 +38,30 @@ const Products = ({ isHome }) => {
   };
 
   const handleClick = (id) => {
-    const item = items.filter((item) => item.id == id);
-    setCartItems([...cartItems, ...item]);
+    if (cartItems.length === 0) {
+      let selectedItem = items.find((item) => item.id == id);
+      selectedItem = { ...selectedItem, qty: 1 };
+      setCartItems([selectedItem]);
+      return;
+    }
+    if (cartItems.length !== 0) {
+      if (cartItems.find((item) => item.id == id)) {
+        const modified = cartItems.map((item) => {
+          if (item.id == id) {
+            let qty = item.qty + 1;
+            return { ...item, qty: qty };
+          }
+          return item;
+        });
+        setCartItems([...modified]);
+      } else {
+        let selectedItem = items.find((item) => item.id == id);
+        selectedItem = { ...selectedItem, qty: 1 };
+        setCartItems([...cartItems, selectedItem]);
+      }
+    }
   };
+  console.log(cartItems);
 
   const handleCartClick = () => {
     setIsCartOpen(!isCartOpen);
@@ -50,8 +71,6 @@ const Products = ({ isHome }) => {
   };
 
   if (loading) <PropagateLoader color="#000" />;
-
-  console.log(isCartOpen);
 
   return (
     <section className="products py-10 text-center bg-slate-100 sm:px-10">
@@ -96,6 +115,25 @@ const Products = ({ isHome }) => {
       >
         cart {cartItems.length}
       </div>
+      {isCartOpen && (
+        <div className="absolute right-0 top-16 w-96 bg-slate-200">
+          <button
+            className="cursor-pointer w-16 h-10 "
+            onClick={handleCloseCart}
+          >
+            X
+          </button>
+          {cartItems.length === 0 ? (
+            <h2 className="text-2xl">Empty Cart</h2>
+          ) : (
+            <div className="pl-16">
+              {cartItems.map((item) => {
+                return <Card key={item.id} item={item} isCart={true} />;
+              })}
+            </div>
+          )}
+        </div>
+      )}
     </section>
   );
 };
