@@ -9,6 +9,7 @@ const Products = ({ isHome }) => {
   const [url, setUrl] = useState("https://fakestoreapi.com/products");
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,13 +62,35 @@ const Products = ({ isHome }) => {
       }
     }
   };
-  console.log(cartItems);
+
+  const updateQuantity = (id, qty) => {
+    if (qty == 0 || qty > 3) {
+      return;
+    }
+    const updated = cartItems.map((item) => {
+      if (item.id == id) return { ...item, qty };
+      return item;
+    });
+    setCartItems([...updated]);
+  };
+
+  const updateTotalAmount = () => {
+    let total = 0;
+    cartItems.forEach((item) => (total += item.price * item.qty));
+    setTotalAmount(total);
+  };
+  useEffect(() => {
+    updateTotalAmount();
+  }, [cartItems]);
 
   const handleCartClick = () => {
     setIsCartOpen(!isCartOpen);
   };
   const handleCloseCart = () => {
     setIsCartOpen(false);
+  };
+  const handleDeleteCartItem = (id) => {
+    setCartItems(cartItems.filter((item) => item.id != id));
   };
 
   if (loading) <PropagateLoader color="#000" />;
@@ -128,10 +151,24 @@ const Products = ({ isHome }) => {
           ) : (
             <div className="pl-16">
               {cartItems.map((item) => {
-                return <Card key={item.id} item={item} isCart={true} />;
+                return (
+                  <Card
+                    key={item.id}
+                    item={item}
+                    isCart={true}
+                    handleQtyInput={updateQuantity}
+                    handleDelete={handleDeleteCartItem}
+                  />
+                );
               })}
             </div>
           )}
+          <div className="pt-10">
+            <p className="font-bold">Total amount: ${totalAmount}</p>
+            <button className="border-solid w-full border-2 p-5 rounded-sm bg-black text-white hover:bg-slate-800">
+              Buy All
+            </button>
+          </div>
         </div>
       )}
     </section>
